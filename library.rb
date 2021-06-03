@@ -28,8 +28,14 @@ class Library
   end
   
   def take(book_title)
-    taken_book = @books.reject! { |book| book_title == book.title }
-    return taken_book
+    to_take = @books.find_index { |book| book_title == book.title }
+    unless to_take.nil?
+      taken_book = @books[to_take]
+      @books.delete_at(to_take)
+      return taken_book
+    else
+      return nil
+    end
   end
   
   def place(book)
@@ -54,6 +60,7 @@ class User
   end
 
   def take(book_title, library)
+    puts "User #{@name} is taking book, #{book_title}"
     book = library.take(book_title)
     unless book.nil?
       @books << book
@@ -62,11 +69,14 @@ class User
     end
   end
 
-  def place(book, library)
+  def place(book_title, library)
+    puts "User #{@name} is placing book, #{book_title}"
     unless library.is_full
-      placed_book = @books.delete { |book| book.title == book_title }
-      if placed_book
-        library.place(book)
+      to_place = @books.find_index { |book| book_title == book.title }
+      unless to_place.nil?
+        placed_book = @books[to_place]
+        @books.delete_at(to_place)
+        library.place(placed_book)
       else
         puts "User #{@name} is currently not holding book #{book_title}."
       end
@@ -76,16 +86,28 @@ class User
   end
 
   def print_books
-    @books.each { |book| puts book.title }
+    if @books.empty?
+      puts "#{name} is not currently holding any books."
+    else
+      puts "#{@name} is currently holding:"
+      @books.each { |book| puts "| #{book.title}" }
+    end
   end
 end
 
 rodney = User.new("Rodney")
-library = Library.new([Book.new("Practical OO Design in Ruby", 245), Book.new("Head First Ruby", 536)])
+books = [Book.new("Practical OO Design in Ruby", 245), Book.new("Head First Ruby", 536)]
+library = Library.new(books)
 rodney.look(library)
 
 rodney.take("Practical OO Design in Ruby", library)
+rodney.print_books
 rodney.look(library)
 
 rodney.take("Head First Ruby", library)
+rodney.print_books
+rodney.look(library)
+
+rodney.place("Practical OO Design in Ruby", library)
+rodney.print_books
 rodney.look(library)
