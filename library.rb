@@ -81,7 +81,7 @@ class User
         puts "User #{@name} is currently not holding book #{book_title}."
       end
     else
-      puts "Unable to place #{book.title} in library. Library is full."
+      puts "User #{@name} unable to place #{book_title} in library. Library is full."
     end
   end
 
@@ -94,7 +94,6 @@ class User
     end
   end
 end
-
 rodney = User.new("Rodney")
 books = [Book.new("Practical OO Design in Ruby", 245), Book.new("Head First Ruby", 536)]
 library = Library.new(books)
@@ -111,3 +110,28 @@ rodney.look(library)
 rodney.place("Practical OO Design in Ruby", library)
 rodney.print_books
 rodney.look(library)
+
+
+# test max books
+eighteen_books = [Book.new("Book 1", 10), \
+  Book.new("Book 2", 10), \
+  Book.new("Book 3", 10), \
+  Book.new("Book 4", 10), \
+  Book.new("Book 5", 10), \
+  Book.new("Book 6", 10), \
+  Book.new("Book 7", 10), \
+  Book.new("Book 8", 10), \
+  Book.new("Book 9", 10), \
+  Book.new("Book 10", 10), \
+  Book.new("Book 11", 10), \
+  Book.new("Book 12", 10), \
+  Book.new("Book 13", 10), \
+  Book.new("Book 14", 10), \
+  Book.new("Book 15", 10), \
+  Book.new("Book 16", 10), \
+  Book.new("Book 17", 10), \
+  Book.new("Book 18", 10)]
+library18 = Library.new(eighteen_books)
+rodney.look(library18)
+rodney.place("Head First Ruby", library18)
+rodney.print_books
